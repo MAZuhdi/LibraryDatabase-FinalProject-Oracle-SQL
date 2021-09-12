@@ -4,9 +4,12 @@ CREATE TABLE anggota (
     nama VARCHAR2(30) CONSTRAINT anggota_nama_nn NOT NULL,
     alamat VARCHAR2(60) CONSTRAINT anggota_alamat_nn NOT NULL,
     no_telp VARCHAR2(15) CONSTRAINT anggota_no_telp_nn NOT NULL,
-    nip VARCHAR2(8),
-    CONSTRAINT anggota_no_telp_uk UNIQUE (no_telp)
+    email VARCHAR2(40),
+    password VARCHAR2(255),
+    CONSTRAINT anggota_no_telp_uk UNIQUE (no_telp),
+    CONSTRAINT anggota_email_uk UNIQUE (email)
 );
+
  
 -- Tabel Pustakawan
 CREATE TABLE pustakawan (
@@ -42,26 +45,26 @@ CREATE TABLE buku (
     id_kategori NUMBER(3,0),
     ketersediaan NUMBER(1,0) CONSTRAINT buku_keter_nn NOT NULL,
     CONSTRAINT buku_id_uk UNIQUE id,
-    CONSTRAINT buku_kat_id_fk FOREIGN KEY (id_kategori) REFERENCES kategori(id),
+    CONSTRAINT buku_kat_id_fk FOREIGN KEY (id_kategori) REFERENCES kategori(id) ON DELETE SET NULL,
     CONSTRAINT check_ketersediaan CHECK (ketersediaan IN (1, 0))
 )
  
  
 -- Tabel Pengarang Buku
 CREATE TABLE pengarang_buku (
-    id_buku NUMBER(8,0) CONSTRAINT peng_buku_id_buku_fk REFERENCES buku(id),
-    id_pengarang NUMBER(8,0) CONSTRAINT peng_buku_id_pengarang_fk REFERENCES pengarang(id),
+    id_buku NUMBER(8,0) CONSTRAINT peng_buku_id_buku_fk REFERENCES buku(id) ON DELETE CASCADE,
+    id_pengarang NUMBER(8,0) CONSTRAINT peng_buku_id_pengarang_fk REFERENCES pengarang(id) ON DELETE CASCADE,
     CONSTRAINT peng_buku_pk PRIMARY KEY (id_buku, id_pengarang)
 )
  
  
 -- Tabel Catatan Peminjaman
 CREATE TABLE catatan_peminjaman (
-    id_buku NUMBER(8,0) CONSTRAINT cat_pem_id_buku_fk REFERENCES buku(id),
+    id_buku NUMBER(8,0) CONSTRAINT cat_pem_id_buku_fk REFERENCES buku(id) ON DELETE CASCADE ,
     tanggal_peminjaman DATE CONSTRAINT cat_pem_tgl_pem_nn NOT NULL,
     tanggal_pengembalian DATE
-    id_anggota NUMBER(8,0) CONSTRAINT cat_pem_id_anggota_fk REFERENCES anggota(id),
-    id_pustakawan NUMBER(8,0) CONSTRAINT cat_pem_id_pustakawan_fk REFERENCES pustakawan(id),
+    id_anggota NUMBER(8,0) CONSTRAINT cat_pem_id_anggota_fk REFERENCES anggota(id) ON DELETE CASCADE,
+    id_pustakawan NUMBER(8,0) CONSTRAINT cat_pem_id_pustakawan_fk REFERENCES pustakawan(id) ON DELETE SET NULL,
     CONSTRAINT cat_pem_id_tgl_pk PRIMARY KEY (id_buku, tanggal_peminjaman),
     CONSTRAINT check_tgl_cat_pem CHECK (tanggal_peminjaman <= tanggal_pengembalian)
 )
@@ -69,7 +72,7 @@ CREATE TABLE catatan_peminjaman (
 -- Tabel Denda
 CREATE TABLE denda (
     id NUMBER(8,0) CONSTRAINT denda_id_pk PRIMARY KEY,
-    id_anggota NUMBER(8,0) CONSTRAINT denda_id_anggota_fk REFERENCES anggota(id),
+    id_anggota NUMBER(8,0) CONSTRAINT denda_id_anggota_fk REFERENCES anggota(id) ON DELETE CASCADE,
     tanggal_denda DATE,
     nominal NUMBER(8,0),
     CONSTRAINT check_nom_denda CHECK (nominal > 0)
@@ -78,9 +81,10 @@ CREATE TABLE denda (
 -- Tabel Pembayaran Denda
 CREATE TABLE pembayaran_denda (
     id NUMBER(8,0) CONSTRAINT pem_den_id_pk PRIMARY KEY,
-    id_anggota NUMBER(8,0) CONSTRAINT denda_id_anggota_fk REFERENCES anggota(id),
+    id_anggota NUMBER(8,0) CONSTRAINT denda_id_anggota_fk REFERENCES anggota(id) ON DELETE CASCADE,
     tanggal_pembayaran DATE,
     nominal_pembayaran NUMBER(8,0)
+    CONSTRAINT check_nom_pem CHECK (nominal > 0)
 )
  
 -- Tabel Shift
@@ -92,8 +96,8 @@ CREATE TABLE shift (
  
 -- Tabel Pemberian Shift
 CREATE TABLE pemberian_shift (
-    kode_shift NUMBER(2,0) CONSTRAINT pem_shift_kode_fk REFERENCES shift(kode),
-    id_pustakawan NUMBER(8,0) CONSTRAINT pem_shift_id_pustakawan REFERENCES pustakawan(id),
+    kode_shift NUMBER(2,0) CONSTRAINT pem_shift_kode_fk REFERENCES shift(kode) ON DELETE CASCADE,
+    id_pustakawan NUMBER(8,0) CONSTRAINT pem_shift_id_pustakawan REFERENCES pustakawan(id) ON DELETE CASCADE,
     tanggal_pemberian DATE NOT NULL,
     CONSTRAINT pem_shift_pk PRIMARY KEY (kode_shift, id_pustakawan)
 )
@@ -108,6 +112,18 @@ START WITH 10
 MAXVALUE 99999999
 NOCYCLE
  
+CREATE SEQUENCE id_denda_seq
+INCREMENT BY 1
+START WITH 1
+MAXVALUE 99999999
+NOCYCLE
+ 
+CREATE SEQUENCE id_pembayaran_seq
+INCREMENT BY 1
+START WITH 1
+MAXVALUE 99999999
+NOCYCLE
+
 --contoh insert into pake sequence (setelah pakai synnonym)
  
  
@@ -152,7 +168,7 @@ INTO pustakawan (id, nama, alamat, no_telp)
 VALUES (54160098, 'Susi Susanti', 'Dramaga, Kabupaten Bogor, Jawa Barat', 081211393463)
 INTO pustakawan (id, nama, alamat, no_telp)
 VALUES (54150052, 'Joni Andreas', 'Dramaga, Kabupaten Bogor, Jawa Barat', 081543453244)
-SELECT * FROM dual;  
+SELECT * FROM dual;
  
 -- Insert pengarang
 INSERT ALL
@@ -247,6 +263,27 @@ VALUES (25, 9)
 INTO pengarang_buku (id_buku, id_pengarang)
 VALUES (96, 6)
 SELECT * FROM dual;  
+
+-- Insert Shift
+INSERT ALL
+INTO shift (kode_shift, deskripsi)
+VALUES (1, 'Masuk jam : 07.00, Keluar jam 11.00')
+INTO shift (kode_shift, deskripsi)
+VALUES (2, 'Masuk jam : 11.00, Keluar jam 15.00')
+INTO shift (kode_shift, deskripsi)
+VALUES (3, 'Masuk jam : 15.00, Keluar jam 19.00')
+SELECT * FROM dual;  
+
+-- Insert pemberian_shift
+INSERT ALL
+INTO pemberian_shift (Kode_shift, id_pustakawan, tanggal_pemberian)
+VALUES ( 1, 54160033, TO_DATE('1-Aug-2021', 'DD-Mon-YYYY')
+INTO pemberian_shift (Kode_shift, id_pustakawan, tanggal_pemberian)
+VALUES ( 2, 54160098, TO_DATE('1-Aug-2021', 'DD-Mon-YYYY')
+INTO pemberian_shift (Kode_shift, id_pustakawan, tanggal_pemberian)
+VALUES ( 3, 54150052, TO_DATE('1-Aug-2021', 'DD-Mon-YYYY')
+SELECT * FROM dual;  
+
  
  
 -- Insert catatan_peminjaman
@@ -255,6 +292,12 @@ INSERT INTO catatan_peminjaman (id_buku, tanggal_peminjaman, tanggal_pengembalia
 VALUES (1, TO_DATE('12-Aug-2021', 'DD-Mon-YYYY'), TO_DATE('19-Aug-2021', 'DD-Mon-YYYY'), 1, 1)
  
  
+-- Insert denda
+INSERT INTO denda (id, tanggal_denda, nominal)
+VALUES (id_denda_seq.NEXTVAL, TO_DATE('12-Aug-2021', 'DD-Mon-YYYY'), 5000, 10)
+INSERT INTO denda (id, tanggal_denda, nominal)
+VALUES (id_denda_seq.NEXTVAL, TO_DATE('13-Aug-2021', 'DD-Mon-YYYY'), 5000, 10)
+
 -- View
  
 CREATE OR REPLACE FORCE VIEW "DETAIL_BUKU" AS
@@ -293,6 +336,19 @@ SELECT COUNT(*) FROM cat_pem GROUP BY id_kategori;
 --SELECT kategori laris
 
 --SELECT Denda sesoorang
+
+SELECT a.nama, ("denda" - "pembayaran") "Total Denda"
+FROM 
+    (SELECT id_anggota , SUM(nominal) "denda"
+    FROM denda
+    GROUP BY id_anggota) d,
+    (SELECT id_anggota, SUM(nominal_pembayaran) "pembayaran"
+    FROM denda
+    GROUP BY id_anggota) p,
+    anggota a
+WHERE 
+    a.id = d.id_anggota
+    AND a.id = p_anggota
 
 --SELECT Jumlah Buku yang sama
 SELECT COUNT(isbn) 
