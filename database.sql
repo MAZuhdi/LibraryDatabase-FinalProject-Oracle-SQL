@@ -60,7 +60,7 @@ CREATE TABLE pengarang_buku (
  
 -- Tabel Catatan Peminjaman
 CREATE TABLE catatan_peminjaman (
-    id_buku NUMBER(8,0) CONSTRAINT cat_pem_id_buku_fk REFERENCES buku(id) ON DELETE CASCADE ,
+    id_buku NUMBER(8,0) CONSTRAINT cat_pem_id_buku_fk REFERENCES buku(id) ON DELETE CASCADE,
     tanggal_peminjaman DATE CONSTRAINT cat_pem_tgl_pem_nn NOT NULL,
     tanggal_pengembalian DATE
     id_anggota NUMBER(8,0) CONSTRAINT cat_pem_id_anggota_fk REFERENCES anggota(id) ON DELETE CASCADE,
@@ -209,59 +209,126 @@ SELECT * FROM dual;
 
 INSERT ALL  
 INTO buku (id, judul, tahun, isbn, id_kategori, ketersediaan)
-VALUES (11, 'Hujan', 2016, '978-602-032-478-4', 101, 1)
+VALUES (111, 'Hujan', 2016, '978-602-032-478-4', 101, 1)
 INTO buku (id, judul, tahun, isbn, id_kategori, ketersediaan)
-VALUES (12, 'Rindu', 2016, '978-602-899-790-4', 101, 1)
+VALUES (112, 'Hujan', 2016, '978-602-032-478-4', 101, 1)
 INTO buku (id, judul, tahun, isbn, id_kategori, ketersediaan)
-VALUES (13, 'Bintang', 2017, '978-602-035-117-9', 101, 1)
+VALUES (113, 'Hujan', 2016, '978-602-032-478-4', 101, 1)
 INTO buku (id, judul, tahun, isbn, id_kategori, ketersediaan)
-VALUES (41,'Attack on Titan vol.1' , 2021, '978-602-021-751-2', 102, 1)
+VALUES (114, 'Hujan', 2016, '978-602-032-478-4', 101, 1)
+ 
 INTO buku (id, judul, tahun, isbn, id_kategori, ketersediaan)
-VALUES (42,'Attack on Titan vol.2' , 2021, '978-602-021-875-2', 102, 1)
+VALUES (121, 'Rindu', 2016, '978-602-899-790-4', 101, 1)
 INTO buku (id, judul, tahun, isbn, id_kategori, ketersediaan)
-VALUES (51,'Lobak Raksasa' , 2018, '978-602-455-402-6', 103, 1)
+VALUES (122, 'Rindu', 2016, '978-602-899-790-4', 101, 1)
+ 
 INTO buku (id, judul, tahun, isbn, id_kategori, ketersediaan)
-VALUES (63,'Peniup Seruling dari Hamelin' , 2013, '978-979-074-027-3', 103, 1)
+VALUES (131, 'Bintang,' 2017, '978-602-035-117-9', 101, 1)
 INTO buku (id, judul, tahun, isbn, id_kategori, ketersediaan)
-VALUES (71,'Putri yang Rapi' , 2017, '978-602-455-213-8', 103, 1)
+VALUES (132, 'Bintang,' 2017, '978-602-035-117-9', 101, 1)
 INTO buku (id, judul, tahun, isbn, id_kategori, ketersediaan)
-VALUES (95,'Ensiklopedia Tubuh Manusia Ed 2' , 2016, '978-602-252-595-0', 201, 1)
+VALUES (133, 'Bintang,' 2017, '978-602-035-117-9', 101, 1)
+ 
 INTO buku (id, judul, tahun, isbn, id_kategori, ketersediaan)
-VALUES (33,'Ensiklopedia Kimia Vol. 5' , 2015, '978-602-252-595-0', 201, 1)
+VALUES (411,'Attack on Titan vol.1' , 2021, '978-602-021-751-2', 102, 1)
 INTO buku (id, judul, tahun, isbn, id_kategori, ketersediaan)
-VALUES (25,'Mohammad Hatta : Biografi Singkat 1902 - 1904' , 2020, '978-623-721-963-7', 202, 0)
+VALUES (412,'Attack on Titan vol.1' , 2021, '978-602-021-751-2', 102, 1)
+ 
 INTO buku (id, judul, tahun, isbn, id_kategori, ketersediaan)
-VALUES (96,'Ensiklopedia Tubuh Manusia Ed 2' , 2016, '978-602-252-595-0', 201, 1)
+VALUES (421,'Attack on Titan vol.2' , 2021, '978-602-021-875-2', 102, 1)
+INTO buku (id, judul, tahun, isbn, id_kategori, ketersediaan)
+VALUES (422,'Attack on Titan vol.2' , 2021, '978-602-021-875-2', 102, 1)
+ 
+INTO buku (id, judul, tahun, isbn, id_kategori, ketersediaan)
+VALUES (511,'Lobak Raksasa' , 2018, '978-602-455-402-6', 103, 1)
+ 
+INTO buku (id, judul, tahun, isbn, id_kategori, ketersediaan)
+VALUES (631,'Peniup Seruling dari Hamelin' , 2013, '978-979-074-027-3', 103, 1)
+INTO buku (id, judul, tahun, isbn, id_kategori, ketersediaan)
+VALUES (632,'Peniup Seruling dari Hamelin' , 2013, '978-979-074-027-3', 103, 1)
+ 
+INTO buku (id, judul, tahun, isbn, id_kategori, ketersediaan)
+VALUES (711,'Putri yang Rapi' , 2017, '978-602-455-213-8', 103, 1)
+INTO buku (id, judul, tahun, isbn, id_kategori, ketersediaan)
+VALUES (712,'Putri yang Rapi' , 2017, '978-602-455-213-8', 103, 1)
+ 
+INTO buku (id, judul, tahun, isbn, id_kategori, ketersediaan)
+VALUES (951,'Ensiklopedia Tubuh Manusia Ed 2' , 2016, '978-602-252-595-0', 201, 1)
+INTO buku (id, judul, tahun, isbn, id_kategori, ketersediaan)
+VALUES (952,'Ensiklopedia Tubuh Manusia Ed 2' , 2016, '978-602-252-595-0', 201, 1)
+ 
+INTO buku (id, judul, tahun, isbn, id_kategori, ketersediaan)
+VALUES (331,'Ensiklopedia Kimia Vol. 5' , 2015, '978-602-252-595-0', 201, 1)
+ 
+INTO buku (id, judul, tahun, isbn, id_kategori, ketersediaan)
+VALUES (251,'Mohammad Hatta : Biografi Singkat 1902 - 1904' , 2020, '978-623-721-963-7', 202, 1)
+INTO buku (id, judul, tahun, isbn, id_kategori, ketersediaan)
+VALUES (252,'Mohammad Hatta : Biografi Singkat 1902 - 1904' , 2020, '978-623-721-963-7', 202, 1)
+INTO buku (id, judul, tahun, isbn, id_kategori, ketersediaan)
+
 SELECT * FROM dual;  
  
 -- Insert Pengarang Buku 
 INSERT ALL  
+INTO pengarang_buku (id_buku, id_pengarang)                 
+VALUES (111, 1)
 INTO pengarang_buku (id_buku, id_pengarang)
-VALUES (11, 1)
+VALUES (112, 1)
 INTO pengarang_buku (id_buku, id_pengarang)
-VALUES (12, 1)
+VALUES (113, 1)
 INTO pengarang_buku (id_buku, id_pengarang)
-VALUES (13, 1)
+VALUES (114, 1)
+ 
 INTO pengarang_buku (id_buku, id_pengarang)
-VALUES (41, 2)
+VALUES (121, 1)
 INTO pengarang_buku (id_buku, id_pengarang)
-VALUES (42, 2)
+VALUES (122, 1)
+ 
 INTO pengarang_buku (id_buku, id_pengarang)
-VALUES (51, 3)
+VALUES (131, 1)
 INTO pengarang_buku (id_buku, id_pengarang)
-VALUES (63, 4)
+VALUES (132, 1)
 INTO pengarang_buku (id_buku, id_pengarang)
-VALUES (71, 5)
+VALUES (133, 1)
+ 
 INTO pengarang_buku (id_buku, id_pengarang)
-VALUES (95, 6)
+VALUES (411, 2)
 INTO pengarang_buku (id_buku, id_pengarang)
-VALUES (33, 7)
+VALUES (412, 2)
+ 
 INTO pengarang_buku (id_buku, id_pengarang)
-VALUES (33, 8)
+VALUES (421, 2)
 INTO pengarang_buku (id_buku, id_pengarang)
-VALUES (25, 9)
+VALUES (422, 2)
 INTO pengarang_buku (id_buku, id_pengarang)
-VALUES (96, 6)
+VALUES (511, 3)
+ 
+INTO pengarang_buku (id_buku, id_pengarang)
+VALUES (631, 4)
+INTO pengarang_buku (id_buku, id_pengarang)
+VALUES (632, 4)
+ 
+INTO pengarang_buku (id_buku, id_pengarang)
+VALUES (711, 5)
+INTO pengarang_buku (id_buku, id_pengarang)
+VALUES (712, 5)
+ 
+INTO pengarang_buku (id_buku, id_pengarang)
+VALUES (951, 6)
+INTO pengarang_buku (id_buku, id_pengarang)
+VALUES (952, 6)
+ 
+INTO pengarang_buku (id_buku, id_pengarang)
+VALUES (331, 7)
+INTO pengarang_buku (id_buku, id_pengarang)
+VALUES (331, 8)
+ 
+INTO pengarang_buku (id_buku, id_pengarang)
+VALUES (251, 9)
+ 
+INTO pengarang_buku (id_buku, id_pengarang)
+VALUES (252, 9)
+
 SELECT * FROM dual;  
 
 -- Insert Shift
