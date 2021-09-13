@@ -1,3 +1,15 @@
+DROP TABLE anggota
+DROP TABLE pustakawan
+DROP TABLE pengarang
+DROP TABLE kategori
+DROP TABLE buku
+DROP TABLE pengarang_buku
+DROP TABLE catatan_peminjaman
+DROP TABLE denda
+DROP TABLE pembayaran_denda
+DROP TABLE shift
+DROP TABLE pemberian_shift
+
 -- Tabel Anggota
 CREATE TABLE anggota (
     id NUMBER(8,0) CONSTRAINT anggota_id_pk PRIMARY KEY,
@@ -17,7 +29,7 @@ CREATE TABLE pustakawan (
     nama VARCHAR2(30) CONSTRAINT pustakawan_nama_nn NOT NULL,
     alamat VARCHAR2(60) CONSTRAINT pustakawan_alamat_nn NOT NULL,
     no_telp VARCHAR2(15) CONSTRAINT pustakawan_no_telp_nn NOT NULL,
-    CONSTRAINT pustakawan_no_telp_uk UNIQUE (no_telp),
+    CONSTRAINT pustakawan_no_telp_uk UNIQUE (no_telp)
 )
  
 -- Tabel Pengarang
@@ -25,7 +37,6 @@ CREATE TABLE pengarang (
     id NUMBER(8,0) CONSTRAINT pengarang_id_pk PRIMARY KEY,
     nama_depan VARCHAR2(20),
     nama_belakang VARCHAR2(20) CONSTRAINT pengarang_namab_nn NOT NULL,
-    CONSTRAINT pengarang_id_uk UNIQUE id,
 )
  
  
@@ -44,7 +55,6 @@ CREATE TABLE buku (
     isbn VARCHAR2(17),
     id_kategori NUMBER(3,0),
     ketersediaan NUMBER(1,0) CONSTRAINT buku_keter_nn NOT NULL,
-    CONSTRAINT buku_id_uk UNIQUE id,
     CONSTRAINT buku_kat_id_fk FOREIGN KEY (id_kategori) REFERENCES kategori(id) ON DELETE SET NULL,
     CONSTRAINT check_ketersediaan CHECK (ketersediaan IN (1, 0))
 )
@@ -62,7 +72,7 @@ CREATE TABLE pengarang_buku (
 CREATE TABLE catatan_peminjaman (
     id_buku NUMBER(8,0) CONSTRAINT cat_pem_id_buku_fk REFERENCES buku(id) ON DELETE CASCADE,
     tanggal_peminjaman DATE CONSTRAINT cat_pem_tgl_pem_nn NOT NULL,
-    tanggal_pengembalian DATE
+    tanggal_pengembalian DATE,
     id_anggota NUMBER(8,0) CONSTRAINT cat_pem_id_anggota_fk REFERENCES anggota(id) ON DELETE CASCADE,
     id_pustakawan NUMBER(8,0) CONSTRAINT cat_pem_id_pustakawan_fk REFERENCES pustakawan(id) ON DELETE SET NULL,
     CONSTRAINT cat_pem_id_tgl_pk PRIMARY KEY (id_buku, tanggal_peminjaman),
@@ -81,17 +91,16 @@ CREATE TABLE denda (
 -- Tabel Pembayaran Denda
 CREATE TABLE pembayaran_denda (
     id NUMBER(8,0) CONSTRAINT pem_den_id_pk PRIMARY KEY,
-    id_anggota NUMBER(8,0) CONSTRAINT denda_id_anggota_fk REFERENCES anggota(id) ON DELETE CASCADE,
+    id_anggota NUMBER(8,0) CONSTRAINT pem_denda_id_anggota_fk REFERENCES anggota(id) ON DELETE CASCADE,
     tanggal_pembayaran DATE,
     nominal_pembayaran NUMBER(8,0)
-    CONSTRAINT check_nom_pem CHECK (nominal > 0)
+    CONSTRAINT check_nom_pem CHECK (nominal_pembayaran > 0)
 )
  
 -- Tabel Shift
 CREATE TABLE shift (
     kode NUMBER(2,0) CONSTRAINT shift_kode_pk PRIMARY KEY,
-    deskripsi VARCHAR2(30),
-    CONSTRAINT shift_kode_uk UNIQUE kode_shift
+    deskripsi VARCHAR2(50)
 )
  
 -- Tabel Pemberian Shift
@@ -104,6 +113,12 @@ CREATE TABLE pemberian_shift (
  
 -- Index
 
+CREATE INDEX buku_judul_idx
+ON buku (judul);
+CREATE INDEX pengarang_idx
+ON pengarang (first_name, last_name);
+CREATE INDEX shift_idx
+ON pemberian_shift (kode_shift);
  
 -- Sequence
 CREATE SEQUENCE id_anggota_sequence
@@ -137,29 +152,24 @@ CREATE SYNONYM cat_pem FOR catatan_peminjaman;
 -- Isi data
  
 --contoh insert into pake sequence (setelah pakai synnonym)
+
 --id 10
 
-INSERT ALL
---id 10
-INTO anggota (id, nama, alamat, no_telp, nip) 
-VALUES (idseq.NEXTVAL, 'Muhammad Agung Zuhdi', 'Desa Sukadami, Kecamatan Cikarang Selatan, Kabupaten Bekasi', '085212342580', '' );
---id 11
-INTO anggota (id, nama, alamat, no_telp, nip) 
-VALUES (idseq.NEXTVAL, 'Dewi Anbara Primayu', 'Condet, Kecamatan Kec. Kramat Jati, Jakarta Timur', '081213238605', '' )
---id 12
-INTO anggota (id, nama, alamat, no_telp, nip) 
-VALUES (idseq.NEXTVAL, 'Winda Oktaviona', 'Dramaga, Kabupaten Bogor, Jawa Barat', '081277653096', '' )
---id 13
-INTO anggota (id, nama, alamat, no_telp, nip) 
-VALUES (idseq.NEXTVAL, 'Indah Permatasari', 'Dramaga, Kabupaten Bogor, Jawa Barat', '081211376545', '' )
---id 14
-INTO anggota (id, nama, alamat, no_telp, nip) 
-VALUES (idseq.NEXTVAL, 'Budi Cahyono', 'Dramaga, Kabupaten Bogor, Jawa Barat', '081211376535', '54160033' )
---id 15
-INTO anggota (id, nama, alamat, no_telp, nip) 
-VALUES (idseq.NEXTVAL, 'Susi Susanti', 'Dramaga, Kabupaten Bogor, Jawa Barat', '081211393463', '54160098' )
-SELECT * FROM dual;  
+INSERT INTO anggota (id, nama, alamat, no_telp, email, password) 
+VALUES (idseq.NEXTVAL, 'Muhammad Agung Zuhdi', 'Desa Sukadami, Kecamatan Cikarang Selatan, Kabupaten Bekasi', '085212342580', 'magungzuh@gmail.com', '713C6827F92CC74' );
+INTO anggota (id, nama, alamat, no_telp, email, password) 
+VALUES (idseq.NEXTVAL, 'Dewi Anbara Primayu', 'Condet, Kecamatan Kec. Kramat Jati, Jakarta Timur', '081213238605', 'ayu.anbara@gmail.com', '713C6827F92CC74' )
+INTO anggota (id, nama, alamat, no_telp, email, password) 
+VALUES (idseq.NEXTVAL, 'Winda Oktaviona', 'Dramaga, Kabupaten Bogor, Jawa Barat', '081277653096', 'winda.oktav@gmail.com', '713C6827F92ddewe4' )
+INTO anggota (id, nama, alamat, no_telp, email, password) 
+VALUES (idseq.NEXTVAL, 'Indah Permatasari', 'Dramaga, Kabupaten Bogor, Jawa Barat', '081211376545', '', '' )
+INTO anggota (id, nama, alamat, no_telp, email, password) 
+VALUES (idseq.NEXTVAL, 'Setiabudi', 'Dramaga, Kabupaten Bogor, Jawa Barat', '081211376546', '', '' )
+INTO anggota (id, nama, alamat, no_telp, email, password) 
+VALUES (idseq.NEXTVAL, 'Lusi Susanti', 'Dramaga, Kabupaten Bogor, Jawa Barat', '081211393463', '', '' )
 
+INSERT INTO anggota (id, nama, alamat, no_telp, email, password) 
+VALUES (idseq.NEXTVAL, '', 'Depok', '085212342580', 'magungzuh@gmail.com', '713C6827F92CC74' );
 -- Insert pustakawan
 INSERT ALL
 INTO pustakawan (id, nama, alamat, no_telp)
@@ -216,23 +226,26 @@ INTO buku (id, judul, tahun, isbn, id_kategori, ketersediaan)
 VALUES (113, 'Hujan', 2016, '978-602-032-478-4', 101, 1)
 INTO buku (id, judul, tahun, isbn, id_kategori, ketersediaan)
 VALUES (114, 'Hujan', 2016, '978-602-032-478-4', 101, 1)
- 
+SELECT * FROM dual;  
+
+INSERT ALL 
 INTO buku (id, judul, tahun, isbn, id_kategori, ketersediaan)
 VALUES (121, 'Rindu', 2016, '978-602-899-790-4', 101, 1)
 INTO buku (id, judul, tahun, isbn, id_kategori, ketersediaan)
 VALUES (122, 'Rindu', 2016, '978-602-899-790-4', 101, 1)
  
 INTO buku (id, judul, tahun, isbn, id_kategori, ketersediaan)
-VALUES (131, 'Bintang,' 2017, '978-602-035-117-9', 101, 1)
+VALUES (131, 'Bintang', 2017, '978-602-035-117-9', 101, 1)
 INTO buku (id, judul, tahun, isbn, id_kategori, ketersediaan)
-VALUES (132, 'Bintang,' 2017, '978-602-035-117-9', 101, 1)
+VALUES (132, 'Bintang', 2017, '978-602-035-117-9', 101, 1)
 INTO buku (id, judul, tahun, isbn, id_kategori, ketersediaan)
-VALUES (133, 'Bintang,' 2017, '978-602-035-117-9', 101, 1)
+VALUES (133, 'Bintang', 2017, '978-602-035-117-9', 101, 1)
  
 INTO buku (id, judul, tahun, isbn, id_kategori, ketersediaan)
 VALUES (411,'Attack on Titan vol.1' , 2021, '978-602-021-751-2', 102, 1)
 INTO buku (id, judul, tahun, isbn, id_kategori, ketersediaan)
 VALUES (412,'Attack on Titan vol.1' , 2021, '978-602-021-751-2', 102, 1)
+SELECT * FROM dual;  
  
 INTO buku (id, judul, tahun, isbn, id_kategori, ketersediaan)
 VALUES (421,'Attack on Titan vol.2' , 2021, '978-602-021-875-2', 102, 1)
@@ -264,7 +277,6 @@ INTO buku (id, judul, tahun, isbn, id_kategori, ketersediaan)
 VALUES (251,'Mohammad Hatta : Biografi Singkat 1902 - 1904' , 2020, '978-623-721-963-7', 202, 1)
 INTO buku (id, judul, tahun, isbn, id_kategori, ketersediaan)
 VALUES (252,'Mohammad Hatta : Biografi Singkat 1902 - 1904' , 2020, '978-623-721-963-7', 202, 1)
-INTO buku (id, judul, tahun, isbn, id_kategori, ketersediaan)
 
 SELECT * FROM dual;  
  
@@ -333,43 +345,69 @@ SELECT * FROM dual;
 
 -- Insert Shift
 INSERT ALL
-INTO shift (kode_shift, deskripsi)
+INTO shift (kode, deskripsi)
 VALUES (1, 'Masuk jam : 07.00, Keluar jam 11.00')
-INTO shift (kode_shift, deskripsi)
+INTO shift (kode, deskripsi)
 VALUES (2, 'Masuk jam : 11.00, Keluar jam 15.00')
-INTO shift (kode_shift, deskripsi)
+INTO shift (kode, deskripsi)
 VALUES (3, 'Masuk jam : 15.00, Keluar jam 19.00')
 SELECT * FROM dual;  
 
 -- Insert pemberian_shift
 INSERT ALL
-INTO pemberian_shift (Kode_shift, id_pustakawan, tanggal_pemberian)
-VALUES ( 1, 54160033, TO_DATE('1-Aug-2021', 'DD-Mon-YYYY')
-INTO pemberian_shift (Kode_shift, id_pustakawan, tanggal_pemberian)
-VALUES ( 2, 54160098, TO_DATE('1-Aug-2021', 'DD-Mon-YYYY')
-INTO pemberian_shift (Kode_shift, id_pustakawan, tanggal_pemberian)
-VALUES ( 3, 54150052, TO_DATE('1-Aug-2021', 'DD-Mon-YYYY')
+INTO pemberian_shift (kode_shift, id_pustakawan, tanggal_pemberian)
+VALUES ( 1, 54160033, TO_DATE('1-Aug-2021', 'DD-Mon-YYYY'))
+INTO pemberian_shift (kode_shift, id_pustakawan, tanggal_pemberian)
+VALUES ( 2, 54160098, TO_DATE('1-Aug-2021', 'DD-Mon-YYYY'))
+INTO pemberian_shift (kode_shift, id_pustakawan, tanggal_pemberian)
+VALUES ( 3, 54150052, TO_DATE('1-Aug-2021', 'DD-Mon-YYYY'))
 SELECT * FROM dual;  
 
  
  
 -- Insert catatan_peminjaman
- 
-INSERT INTO catatan_peminjaman (id_buku, tanggal_peminjaman, tanggal_pengembalian, id_anggota, id_pustakawan)
-VALUES (1, TO_DATE('12-Aug-2021', 'DD-Mon-YYYY'), TO_DATE('19-Aug-2021', 'DD-Mon-YYYY'), 1, 1)
- 
- 
+
+INSERT ALL
+INTO catatan_peminjaman (id_buku, tanggal_peminjaman, tanggal_pengembalian, id_anggota, id_pustakawan)
+VALUES (411, TO_DATE('03-Aug-2021', 'DD-Mon-YYYY'), TO_DATE('10-Aug-2021', 'DD-Mon-YYYY'), 12, 54160033)
+
+INTO catatan_peminjaman (id_buku, tanggal_peminjaman, tanggal_pengembalian, id_anggota, id_pustakawan)
+VALUES (111, TO_DATE('03-Aug-2021','DD-Mon-YYYY'), TO_DATE('14-Aug-2021', 'DD-Mon-YYYY'), 13, 54160033)
+
+INTO catatan_peminjaman (id_buku, tanggal_peminjaman, tanggal_pengembalian, id_anggota, id_pustakawan)
+VALUES (251, TO_DATE('12-Aug-2021','DD-Mon-YYYY'), TO_DATE('22-Aug-2021', 'DD-Mon-YYYY'), 10, 54160033)
+SELECT * FROM dual;  
+
+INTO catatan_peminjaman (id_buku, tanggal_peminjaman, tanggal_pengembalian, id_anggota, id_pustakawan)
+VALUES (133, TO_DATE('14-Aug-2021','DD-Mon-YYYY'), TO_DATE('21-Aug-2021', 'DD-Mon-YYYY'), 11, 54160033)
+SELECT * FROM dual;  
+
+
+
 -- Insert denda
-INSERT INTO denda (id, tanggal_denda, nominal)
-VALUES (id_denda_seq.NEXTVAL, TO_DATE('12-Aug-2021', 'DD-Mon-YYYY'), 5000, 10)
-INSERT INTO denda (id, tanggal_denda, nominal)
-VALUES (id_denda_seq.NEXTVAL, TO_DATE('13-Aug-2021', 'DD-Mon-YYYY'), 5000, 10)
+INSERT ALL
+INTO denda (id, id_anggota, tanggal_denda, nominal)
+VALUES (id_denda_seq.NEXTVAL, 13, TO_DATE('12-Aug-2021', 'DD-Mon-YYYY'), 1000)
+INTO denda (id, id_anggota, tanggal_denda, nominal)
+VALUES (id_denda_seq.NEXTVAL, 13, TO_DATE('13-Aug-2021', 'DD-Mon-YYYY'), 1000)
+INTO denda (id, id_anggota, tanggal_denda, nominal)
+VALUES (id_denda_seq.NEXTVAL, 10, TO_DATE('20-Aug-2021', 'DD-Mon-YYYY'), 1000)
+INTO denda (id, id_anggota, tanggal_denda, nominal)
+VALUES (id_denda_seq.NEXTVAL, 10, TO_DATE('21-Aug-2021', 'DD-Mon-YYYY'), 1000)
+INTO denda (id, id_anggota, tanggal_denda, nominal)
+VALUES (id_denda_seq.NEXTVAL, 10, TO_DATE('22-Aug-2021', 'DD-Mon-YYYY'), 1000)
+SELECT 1 FROM dual; 
+
+-- Insert pembayaran denda
+INSERT INTO pembayaran_denda (id, id_anggota, tanggal_pembayaran, nominal_pembayaran)
+VALUES (id_denda_seq.NEXTVAL, 13, TO_DATE('14-Aug-2021', 'DD-Mon-YYYY'), 2000)
+
 
 -- View
  
 CREATE OR REPLACE FORCE VIEW "DETAIL_BUKU" AS
     SELECT 
-        DISTINCT("ID"), "ISBN", "JUDUL", "TAHUN", "KATEGORI", LISTAGG("PENGARANG", '; ') WITHIN GROUP (ORDER BY "PENGARANG")OVER (PARTITION BY "JUDUL") as "PENGARANG"  
+        DISTINCT("ID"), "ISBN", "JUDUL", "TAHUN", "KATEGORI", LISTAGG("PENGARANG", '; ') WITHIN GROUP (ORDER BY "PENGARANG")OVER (PARTITION BY "ID") as "PENGARANG"  
     FROM
         (SELECT b.id "ID", b.isbn "ISBN", b.judul "JUDUL", b.tahun "TAHUN", k.nama "KATEGORI", p.nama_depan || ' ' || p.nama_belakang "PENGARANG"
         FROM        
@@ -398,24 +436,34 @@ SELECT *
 FROM DETAIL_BUKU
 WHERE LOWER("PENGARANG") LIKE '%haj%'
  
-SELECT COUNT(*) FROM cat_pem GROUP BY id_kategori;
+SELECT 
+    k.nama "Kategori", COUNT(k.nama) "Jumlah yang dipinjam"
+FROM 
+    cat_pem c,
+    buku b,
+    kategori k
+WHERE c.id_buku = b.id AND b.id_kategori = k.id
+GROUP BY k.nama
+ORDER BY "Jumlah yang dipinjam" DESC
+
+GROUP BY id_kategori;
 
 --SELECT kategori laris
 
---SELECT Denda sesoorang
+--SELECT Denda yang belum dibayar
 
-SELECT a.nama, ("denda" - "pembayaran") "Total Denda"
-FROM 
-    (SELECT id_anggota , SUM(nominal) "denda"
-    FROM denda
-    GROUP BY id_anggota) d,
-    (SELECT id_anggota, SUM(nominal_pembayaran) "pembayaran"
-    FROM denda
-    GROUP BY id_anggota) p,
-    anggota a
-WHERE 
-    a.id = d.id_anggota
-    AND a.id = p_anggota
+SELECT a.id, a.nama, "Denda yang belum dibayar"
+FROM anggota a,
+    (SELECT d.id_anggota "id", NVL("denda",0) - NVL("pembayaran",0) "Denda yang belum dibayar"
+     FROM 
+        (SELECT id_anggota , SUM(nominal) "denda"
+        FROM denda
+        GROUP BY id_anggota) d,
+        (SELECT id_anggota, SUM(nominal_pembayaran) "pembayaran"
+        FROM pembayaran_denda
+        GROUP BY id_anggota) p
+     WHERE d.id_anggota = p.id_anggota (+)) b
+WHERE a.id = b."id"
 
 --SELECT Jumlah Buku yang sama
 SELECT COUNT(isbn) 
@@ -427,17 +475,17 @@ WHERE isbn = '978-602-252-595-0';
 --update isbn buku
 UPDATE buku
 SET isbn = '978-602-252-596-0'
-WHERE id = 33
+WHERE id = 331
 
 --update nominal denda jadi minus
-
 UPDATE denda
 SET nominal = -9000
 WHERE id = 1
 
---delete buku
-DELETE FROM buku
-WHERE id = 96
+--delete kategoti
+DELETE FROM kategori
+WHERE id = 103
+
  
  
  
