@@ -382,6 +382,10 @@ INTO catatan_peminjaman (id_buku, tanggal_peminjaman, tanggal_pengembalian, id_a
 VALUES (133, TO_DATE('14-Aug-2021','DD-Mon-YYYY'), TO_DATE('21-Aug-2021', 'DD-Mon-YYYY'), 11, 54160033)
 SELECT * FROM dual;  
 
+INTO catatan_peminjaman (id_buku, tanggal_peminjaman, tanggal_pengembalian, id_anggota, id_pustakawan)
+VALUES (133, TO_DATE('1-Sep-2021','DD-Mon-YYYY'), TO_DATE('7-Sep-2021', 'DD-Mon-YYYY'), 11, 54160033)
+SELECT * FROM dual;  
+
 
 
 -- Insert denda
@@ -482,10 +486,21 @@ UPDATE denda
 SET nominal = -9000
 WHERE id = 1
 
---delete kategoti
+--delete kategori
 DELETE FROM kategori
 WHERE id = 103
 
  
- 
- 
+-- Berdasarkan bulan
+SELECT extract(year from tanggal_peminjaman) "tahun", extract(month from tanggal_peminjaman) "bulan", k.nama, COUNT(k.nama) "Jumlah yang dipinjam"
+FROM    cat_pem c,    buku b,    kategori k
+WHERE c.id_buku = b.id AND b.id_kategori = k.id
+GROUP BY extract(year from tanggal_peminjaman), extract(month from tanggal_peminjaman), ROLLUP(k.nama)
+ORDER BY "Jumlah yang dipinjam" DESC;
+
+-- Berdasarkan tahun
+SELECT extract(year from tanggal_peminjaman) "tahun", k.nama, COUNT(k.nama) "Jumlah yang dipinjam"
+FROM    cat_pem c,    buku b,    kategori k
+WHERE c.id_buku = b.id AND b.id_kategori = k.id
+GROUP BY extract(year from tanggal_peminjaman), ROLLUP(k.nama)
+ORDER BY "Jumlah yang dipinjam" DESC;
