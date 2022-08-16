@@ -156,20 +156,20 @@ CREATE SYNONYM cat_pem FOR catatan_peminjaman;
 --id 10
 
 INSERT INTO anggota (id, nama, alamat, no_telp, email, password) 
-VALUES (idseq.NEXTVAL, 'Muhammad Agung Zuhdi', 'Desa Sukadami, Kecamatan Cikarang Selatan, Kabupaten Bekasi', '085212342580', 'magungzuh@gmail.com', '713C6827F92CC74' );
+VALUES (idseq.NEXTVAL, 'Muhammad Agung Zuhdi', 'Desa Sukadami, Kecamatan Cikarang Selatan, Kabupaten Bekasi', '0324234423', 'magungzuh@gmail.com', '713C6827F92CC74' );
 INTO anggota (id, nama, alamat, no_telp, email, password) 
-VALUES (idseq.NEXTVAL, 'Dewi Anbara Primayu', 'Condet, Kecamatan Kec. Kramat Jati, Jakarta Timur', '081213238605', 'ayu.anbara@gmail.com', '713C6827F92CC74' )
+VALUES (idseq.NEXTVAL, 'Dewi Anbara Primayu', 'Condet, Kecamatan Kec. Kramat Jati, Jakarta Timur', '08121323205', 'ayu.anbara@gmail.com', '713C6827F92CC74' )
 INTO anggota (id, nama, alamat, no_telp, email, password) 
-VALUES (idseq.NEXTVAL, 'Winda Oktaviona', 'Dramaga, Kabupaten Bogor, Jawa Barat', '081277653096', 'winda.oktav@gmail.com', '713C6827F92ddewe4' )
+VALUES (idseq.NEXTVAL, 'Winda Oktaviona', 'Dramaga, Kabupaten Bogor, Jawa Barat', '081272323096', 'winda.oktav@gmail.com', '713C6827F92ddewe4' )
 INTO anggota (id, nama, alamat, no_telp, email, password) 
-VALUES (idseq.NEXTVAL, 'Indah Permatasari', 'Dramaga, Kabupaten Bogor, Jawa Barat', '081211376545', '', '' )
+VALUES (idseq.NEXTVAL, 'Indah Permatasari', 'Dramaga, Kabupaten Bogor, Jawa Barat', '081211322545', '', '' )
 INTO anggota (id, nama, alamat, no_telp, email, password) 
 VALUES (idseq.NEXTVAL, 'Setiabudi', 'Dramaga, Kabupaten Bogor, Jawa Barat', '081211376546', '', '' )
 INTO anggota (id, nama, alamat, no_telp, email, password) 
 VALUES (idseq.NEXTVAL, 'Lusi Susanti', 'Dramaga, Kabupaten Bogor, Jawa Barat', '081211393463', '', '' )
 
 INSERT INTO anggota (id, nama, alamat, no_telp, email, password) 
-VALUES (idseq.NEXTVAL, '', 'Depok', '085212342580', 'magungzuh@gmail.com', '713C6827F92CC74' );
+VALUES (idseq.NEXTVAL, '', 'Depok', '0852123432320', 'magungzuh@gmail.com', '713C6827F92CC74' );
 -- Insert pustakawan
 INSERT ALL
 INTO pustakawan (id, nama, alamat, no_telp)
