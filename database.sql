@@ -156,7 +156,7 @@ CREATE SYNONYM cat_pem FOR catatan_peminjaman;
 --id 10
 
 INSERT INTO anggota (id, nama, alamat, no_telp, email, password) 
-VALUES (idseq.NEXTVAL, 'Muhammad Agung Zuhdi', 'Desa Sukadami, Kecamatan Cikarang Selatan, Kabupaten Bekasi', '0324234423', 'magungzuh@gmail.com', '713C6827F92CC74' );
+VALUES (idseq.NEXTVAL, 'Muhammad Agung Zuhdi', 'Desa Bekasi, Kecamatan Cikarang, Kabupaten Bekasi', '0324234423', 'magungzuh@gmail.com', '713C6827F92CC74' );
 INTO anggota (id, nama, alamat, no_telp, email, password) 
 VALUES (idseq.NEXTVAL, 'Dewi Anbara Primayu', 'Condet, Kecamatan Kec. Kramat Jati, Jakarta Timur', '08121323205', 'ayu.anbara@gmail.com', '713C6827F92CC74' )
 INTO anggota (id, nama, alamat, no_telp, email, password) 
